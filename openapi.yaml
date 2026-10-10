@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: YouTube Gemini Analyzer
+  version: 1.0.0
+  description: >
+    Sends a public YouTube URL to Gemini for timestamped video analysis.
+    Gemini processes the URL server-side; nothing is downloaded.
+servers:
+  # REPLACE with your deployed backend URL, e.g. https://youtube-gemini-analyzer.onrender.com
+  - url: https://REPLACE-WITH-YOUR-RENDER-URL
+paths:
+  /analyze:
+    post:
+      operationId: analyzeVideo
+      summary: Analyze a YouTube video with Gemini
+      description: >
+        Analyzes the video at the given public YouTube URL and returns a
+        structured, timestamped feat analysis. Use this whenever the user
+        shares a YouTube link and wants to know what happens in it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - youtube_url
+              properties:
+                youtube_url:
+                  type: string
+                  description: Full public YouTube watch URL.
+                focus:
+                  type: string
+                  description: >
+                    Optional focus, e.g. "the optic blast feat" or "any
+                    durability showings". Leave empty for a general analysis.
+      responses:
+        '200':
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  video_url:
+                    type: string
+                  model:
+                    type: string
+                  focus:
+                    type: string
+                  analysis:
+                    type: string
+                    description: The structured timestamped analysis.
+                  coverage_note:
+                    type: string
